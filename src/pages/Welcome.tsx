@@ -1,12 +1,21 @@
 import React, { ReactElement } from 'react';
 import { SafeAreaView, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import wateringImg from '../assets/watering.png';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import { useCallback } from 'react';
+
  
 export default function Welcome(): ReactElement {
+  const { navigate } = useNavigation();
+
+  const handleNavigate = useCallback(() => {
+    navigate('UserIdentification');
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -27,7 +36,7 @@ export default function Welcome(): ReactElement {
           Nós cuidamos de lembrar você sempre que precisar.
         </Text>
 
-        <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={handleNavigate}>
             <Feather name="chevron-right" style={styles.buttonIcon} />
         </TouchableOpacity>
       </View>
