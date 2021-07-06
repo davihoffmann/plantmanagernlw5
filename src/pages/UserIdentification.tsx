@@ -1,5 +1,4 @@
 import React, { ReactElement, useCallback, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { 
   KeyboardAvoidingView, 
   SafeAreaView, 
@@ -9,8 +8,11 @@ import {
   TextInput, 
   Platform,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Alert,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from '../components/Button';
 
@@ -24,9 +26,15 @@ export default function UserIdentification(): ReactElement {
 
   const { navigate } = useNavigation();
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async () => {
+    if(!name) {
+      return Alert.alert('Me diz como chamar você 🧐');
+    }
+
+    await AsyncStorage.setItem('@plantmanager:user', name)
+
     navigate('Confirmation');
-  }, []);
+  }, [name]);
 
   const hanldeInputBlur = useCallback(() => {
     setIsFocused(false);
@@ -37,10 +45,10 @@ export default function UserIdentification(): ReactElement {
     setIsFocused(true);
   }, []);
 
-  const handleInputChange = useCallback((value: string) => {
+  function handleInputChange(value: string){
     setIsFilled(!!value);
     setName(value);
-  }, []);
+  };
   
   return (
     <SafeAreaView style={styles.container}>

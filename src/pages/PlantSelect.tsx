@@ -38,7 +38,6 @@ export default function PlantSelect(): ReactElement {
 
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadedAll, setLoadedAll] = useState(false);
 
   function handleEnviromentSelected(eviroment: string) {
     setEnviromentSelected(eviroment);
