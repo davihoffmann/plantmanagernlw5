@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 
 import Button from '../components/Button';
@@ -7,6 +8,12 @@ import colors from '../styles/colors';
 import fonts from '../styles/fonts';
  
 export default function Confirmation(): ReactElement {
+  const { navigate } = useNavigation();
+
+  const handleNavite = useCallback(() => {
+    navigate('PlantSelect');
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
@@ -23,7 +30,7 @@ export default function Confirmation(): ReactElement {
           plantinhas com muito cuidado.
         </Text>
         <View style={styles.footer}>
-          <Button title="Continuar" />
+          <Button title="Continuar" onPress={handleNavite} />
         </View>
       </View>
     </SafeAreaView>
