@@ -22,13 +22,15 @@ export default function MyPlants(): ReactElement {
     async function loadStorageData() {
       const plantsStorage = await plantLoad();
 
-      const nextTime = formatDistance(
-        new Date(plantsStorage[0].dateTimeNotification).getTime(),
-        new Date().getTime(),
-        { locale: ptBR }
-      );
+      if (plantsStorage[0]) {
+        const nextTime = formatDistance(
+          new Date(plantsStorage[0].dateTimeNotification).getTime(),
+          new Date().getTime(),
+          { locale: ptBR }
+        );
 
-      setNextWaterd(`Não esqueça de regar a ${plantsStorage[0].name} à ${nextTime} horas`);
+        setNextWaterd(`Não esqueça de regar a ${plantsStorage[0].name} à ${nextTime} horas`);
+      }
       setPlants(plantsStorage);
       setLoading(false);
     }

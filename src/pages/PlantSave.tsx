@@ -27,46 +27,41 @@ export default function PlantSave(): ReactElement {
   const [selectedDateTime, setSelectedDateTime] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
 
-  const handleChangeTime = useCallback((event: Event, dateTime: Date | undefined) => {
-    if(Platform.OS === 'android') {
-      setShowDatePicker(oldState => !oldState);
+  function handleChangeTime(event: Event, dateTime: Date | undefined) {
+    if (Platform.OS === "android") {
+      setShowDatePicker((oldState) => !oldState);
     }
 
-    if(dateTime && isBefore(dateTime, new Date())) {
+    if (dateTime && isBefore(dateTime, new Date())) {
       setSelectedDateTime(new Date());
-
-      Alert.alert('Escolha uma hora no futuro! ⏱');
-
-      return;
+      return Alert.alert("Escolha uma hora no futuro! ⏰");
     }
 
-    if (dateTime) {
-      setSelectedDateTime(dateTime);
-    }
-  }, []);
+    if (dateTime) setSelectedDateTime(dateTime);
+  }
 
-  const handleOpenDateTimePickerForAndroid = useCallback(() => {
-    setShowDatePicker(oldState => !oldState);
-  }, []);
+  function handleOpenDatetimePickerForAndroid() {
+    setShowDatePicker((oldState) => !oldState);
+  }
 
-  const handleSave = useCallback(async () => {
+  async function handleSave() {
     try {
       await plantSave({
         ...plant,
-        dateTimeNotification: selectedDateTime
+        dateTimeNotification: selectedDateTime,
       });
 
-      navigate('Confirmation', {
-        title: 'Tudo Certo',
-        subtitle: 'Fique tranquilo que sempre vamos lembrar de cuidar da sua plantinha com muito cuidado',
-        buttonTitle: 'Muito obrigado!',
-        icon: 'hug',
-        nextScreen: 'MyPlants',
+      navigate("Confirmation", {
+        title: "Tudo certo",
+        subtitle: `Fique tranquilo que sempre vamos lembrar você de cuidar da sua plantinha com muito cuidado.`,
+        buttonTitle: "Muito obrigado",
+        icon: "hug",
+        nextScreen: "MyPlants",
       });
     } catch {
-      Alert.alert('Não foi possível salvar! 😞');
+      Alert.alert("Não foi possível salvar. 😢");
     }
-  }, []);
+  }
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
@@ -106,7 +101,7 @@ export default function PlantSave(): ReactElement {
 
           { 
             Platform.OS === 'android' && (
-              <TouchableOpacity style={styles.dateTimePickerButton} onPress={handleOpenDateTimePickerForAndroid}>
+              <TouchableOpacity style={styles.dateTimePickerButton} onPress={handleOpenDatetimePickerForAndroid}>
                 <Text style={styles.dateTimePickerText}>
                   {`Mudar ${format(selectedDateTime, 'HH:mm')}`}
                 </Text>

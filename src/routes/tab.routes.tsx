@@ -6,6 +6,7 @@ import PlantSelect from '../pages/PlantSelect';
 import MyPlants from '../pages/MyPlants';
 
 import colors from '../styles/colors';
+import { Platform } from 'react-native';
 
 const AppTab = createBottomTabNavigator();
 
@@ -17,7 +18,7 @@ const AuthRoutes: React.FC = () => {
         inactiveTintColor: colors.heading,
         labelPosition: 'beside-icon',
         style: {
-          paddingVertical: 20,
+          paddingVertical: Platform.OS === 'ios' ? 20 : 0,
           height: 88
         }
       }}>
