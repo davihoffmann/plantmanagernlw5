@@ -1,5 +1,5 @@
-import React, { ReactElement, useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, Text, Image, FlatList } from 'react-native';
+import React, { ReactElement, useState, useEffect, useCallback } from 'react';
+import { StyleSheet, View, Text, Image, FlatList, Alert } from 'react-native';
 import { formatDistance } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -7,12 +7,12 @@ import Header from '../components/Header';
 import PlantCardSecundary from '../components/PlantCardSecundary';
 import Load from '../components/Load';
 
+import { PlantsProps, plantLoad, removePlant } from '../libs/storage';
+
 import waterdropImg from '../assets/waterdrop.png'
 import colors from '../styles/colors';
-import { PlantsProps, plantLoad } from '../libs/storage';
-import { Jost_100Thin_Italic } from '@expo-google-fonts/jost';
 import fonts from '../styles/fonts';
- 
+
 export default function MyPlants(): ReactElement {
   const [plants, setPlants] = useState<PlantsProps[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +34,21 @@ export default function MyPlants(): ReactElement {
     }
 
     loadStorageData();
+  }, []);
+
+  const handleRemove = useCallback((plant: PlantsProps) => {
+    Alert.alert('Remover', `Deseja remover a ${plant.name}?`, [
+      { text: 'Não 👀', style: 'cancel'},
+      { text: 'Sim 🖖🏼', onPress: async () => {
+        try {
+          await removePlant(plant.id);
+
+          setPlants(oldData => oldData.filter(item => item.id !== plant.id));
+        } catch(error) {
+          Alert.alert('Não foi possível remover! 👀');
+        }
+      }}
+    ]);
   }, []);
 
   if(loading) {
@@ -62,7 +77,7 @@ export default function MyPlants(): ReactElement {
         <FlatList
           data={plants}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({item}) => <PlantCardSecundary data={item} />}
+          renderItem={({item}) => <PlantCardSecundary data={item} handleRemove={() => handleRemove(item)} />}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flex: 1 }}
         />
@@ -99,7 +114,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   plants: {
-    flex: Jost_100Thin_Italic,
+    flex: 1,
     width: '100%',
   },
   plantsTitle: {
