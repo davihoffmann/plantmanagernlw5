@@ -1,43 +1,38 @@
 import React, { ReactElement, useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import Header from '../components/Header';
 import EnviromentButton from '../components/EnviromentButton';
 import PlantCardPrimary from '../components/PlantCardPrimary';
 import Load from '../components/Load';
 
+import { PlantsProps } from '../libs/storage';
 import api from '../services/api';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+
 
 interface EnviromentProps {
   key: string;
   title: string;
 }
 
-interface PlantsProps {
-  id: number;
-  name: string;
-  about: string;
-  water_tips: string;
-  photo: string;
-  environments: string[];
-  frequency: {
-    times: number;
-    repeat_every: string;
-  }
-}
  
 export default function PlantSelect(): ReactElement {
+  const {navigate} = useNavigation();
   const [enviroments, setEnviroments] = useState<EnviromentProps[]>([]);
   const [plants, setPlants] = useState<PlantsProps[]>([]);
   const [filteredPlants, setFilteredPlants] = useState<PlantsProps[]>([]);
   const [enviromentSelected, setEnviromentSelected] = useState('all');
   const [loading, setLoading] = useState(true);
-
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
+
+  const handleSelectPlant = useCallback((plant: PlantsProps) => {
+    navigate('PlantSave', { plant });
+  }, []);
 
   function handleEnviromentSelected(eviroment: string) {
     setEnviromentSelected(eviroment);
@@ -133,7 +128,7 @@ export default function PlantSelect(): ReactElement {
             data={filteredPlants}
             keyExtractor={(item) => item.name}
             renderItem={({item}) => (
-              <PlantCardPrimary data={item} />
+              <PlantCardPrimary data={item} onPress={() => handleSelectPlant(item)} />
             )}
             showsVerticalScrollIndicator={false}
             numColumns={2}

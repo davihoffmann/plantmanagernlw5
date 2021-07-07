@@ -1,5 +1,5 @@
 import React, { ReactElement, useCallback } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 
 import Button from '../components/Button';
@@ -7,30 +7,47 @@ import Button from '../components/Button';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
  
+interface Params {
+  title: string;
+  subtitle: string;
+  buttonTitle: string;
+  icon: 'smile' | 'hug',
+  nextScreen: string;
+}
+
+const emojis = {
+  smile:  '😄',
+  hug: '😆'
+}
+
 export default function Confirmation(): ReactElement {
   const { navigate } = useNavigation();
+  const routes = useRoute();
+
+  const {
+    title, subtitle, buttonTitle, icon, nextScreen
+  } = routes.params as Params;
 
   const handleNavite = useCallback(() => {
-    navigate('PlantSelect');
-  }, []);
+    navigate(nextScreen);
+  }, [nextScreen]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.emoji}>
-          🤩
+          {emojis[icon]}
         </Text>
 
         <Text style={styles.title}>
-          Prontinho
+          {title}
         </Text>
 
         <Text style={styles.subtitle}>
-          Agora vamos começar a cuidar das suas 
-          plantinhas com muito cuidado.
+          {subtitle}
         </Text>
         <View style={styles.footer}>
-          <Button title="Continuar" onPress={handleNavite} />
+          <Button title={buttonTitle} onPress={handleNavite} />
         </View>
       </View>
     </SafeAreaView>
