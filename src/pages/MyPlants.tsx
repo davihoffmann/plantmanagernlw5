@@ -5,6 +5,7 @@ import { ptBR } from 'date-fns/locale';
 
 import Header from '../components/Header';
 import PlantCardSecundary from '../components/PlantCardSecundary';
+import Load from '../components/Load';
 
 import waterdropImg from '../assets/waterdrop.png'
 import colors from '../styles/colors';
@@ -34,6 +35,10 @@ export default function MyPlants(): ReactElement {
 
     loadStorageData();
   }, []);
+
+  if(loading) {
+    return <Load />
+  }
 
   return (
     <View style={styles.container}>

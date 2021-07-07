@@ -12,6 +12,7 @@ export interface PlantsProps {
     times: number;
     repeat_every: string;
   }
+  hour: string;
   dateTimeNotification: Date;
 }
 
