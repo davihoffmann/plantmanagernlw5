@@ -21,7 +21,7 @@ export default function MyPlants(): ReactElement {
   useEffect(() => {
     async function loadStorageData() {
       const plantsStorage = await plantLoad();
-
+      
       if (plantsStorage[0]) {
         const nextTime = formatDistance(
           new Date(plantsStorage[0].dateTimeNotification).getTime(),
@@ -79,9 +79,13 @@ export default function MyPlants(): ReactElement {
         <FlatList
           data={plants}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({item}) => <PlantCardSecundary data={item} handleRemove={() => handleRemove(item)} />}
+          renderItem={({item}) => (
+            <PlantCardSecundary 
+              data={item} 
+              handleRemove={() => handleRemove(item)} 
+            />
+          )}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flex: 1 }}
         />
       </View>
     </View>
